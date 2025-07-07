@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/textViewName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            tools:text="Person Name" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewKwh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="Verbrauch: 123.45 kWh" />
+
+            <ImageButton
+                android:id="@+id/buttonEditKwh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="kWh-Stand bearbeiten"
+                android:src="@android:drawable/ic_menu_edit"
+                app:tint="?attr/colorControlNormal" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textViewKosten"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Kosten Verbrauch: 43,21 €" />
+
+        <TextView
+            android:id="@+id/textViewGesamtkosten"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Gesamtkosten: 58,21 €" />
+
+        <TextView
+            android:id="@+id/textViewGuthaben"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4CAF50"
+            tools:text="Guthaben: -100,00 €" />
+
+        <TextView
+            android:id="@+id/textViewZuZahlen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="bold"
+            tools:text="Noch zu zahlen: -41,79 €" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/editTextAddKwh"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="kWh hinzufügen"
+                android:inputType="numberDecimal" />
+
+            <Button
+                android:id="@+id/buttonAddKwh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

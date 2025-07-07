@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "858850534334",
+    "project_id": "strom-monitor",
+    "storage_bucket": "strom-monitor.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858850534334:android:11595be6533856a1390fef",
+        "android_client_info": {
+          "package_name": "com.example.strom_monitor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcO81rH7hnydpn-kLb0DPoINLlVFmLk6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
