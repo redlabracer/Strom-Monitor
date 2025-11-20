@@ -23,9 +23,11 @@
 
     <color name="md_theme_error">#BA1A1A</color>
     <color name="md_theme_onError">#FFFFFF</color>
-    <color name="md_theme_background">#FFFBFF</color>
+    <!-- Changed background to light grey for One UI look -->
+    <color name="md_theme_background">#F2F2F2</color>
     <color name="md_theme_onBackground">#1F1B16</color>
-    <color name="md_theme_surface">#FFFBFF</color>
+    <!-- Surface is White for cards -->
+    <color name="md_theme_surface">#FFFFFF</color>
     <color name="md_theme_onSurface">#1F1B16</color>
     <color name="md_theme_surfaceVariant">#EDE1CF</color>
     <color name="md_theme_onSurfaceVariant">#4D4639</color>

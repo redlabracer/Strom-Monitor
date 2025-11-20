@@ -1,77 +1,110 @@
 <!-- res/layout/fragment_statistics.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".StatisticsFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="Statistik"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
 
         <Spinner
             android:id="@+id/spinnerPersons"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="8dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:paddingStart="12dp"
+            android:paddingEnd="36dp"
+            android:background="@drawable/bg_spinner_rounded" />
 
         <Spinner
             android:id="@+id/spinnerYear"
-            android:layout_width="135dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
             android:layout_marginStart="8dp"
-            android:layout_weight="0.5" />
+            android:layout_weight="0.6"
+            android:paddingStart="12dp"
+            android:paddingEnd="36dp"
+            android:background="@drawable/bg_spinner_rounded"/>
 
         <!-- NEUER BUTTON -->
         <Button
             android:id="@+id/buttonExport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
+            app:cornerRadius="20dp"
             android:text="Export" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_details"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="center_horizontal">
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="26dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="?attr/colorSurface">
 
-        <TextView
-            android:id="@+id/textViewDetail1"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layout_details"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="Detail 1: 123,45 €" />
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/textViewDetail2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            tools:text="Detail 2: 678,90 kWh"/>
+            <TextView
+                android:id="@+id/textViewDetail1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="Detail 1: 123,45 €" />
 
-        <Button
-            android:id="@+id/buttonEditGuthaben"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Bearbeiten" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/textViewDetail2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="Detail 2: 678,90 kWh"/>
+
+            <Button
+                android:id="@+id/buttonEditGuthaben"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cornerRadius="20dp"
+                android:text="Bearbeiten" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewAbrechnungen"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
         tools:listitem="@layout/list_item_abrechnung" />
 
     <com.github.mikephil.charting.charts.BarChart

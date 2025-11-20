@@ -87,30 +87,32 @@ class StatisticsFragment : Fragment() {
         binding.barChart.setDrawGridBackground(false)
         binding.barChart.setDrawValueAboveBar(true)
 
+        // Configure X Axis
         val xAxis = binding.barChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)
+        xAxis.setDrawAxisLine(false) // Remove X-axis line
         xAxis.granularity = 1f
         xAxis.valueFormatter = IndexAxisValueFormatter(monthLabels)
         xAxis.textColor = textColor
+        xAxis.yOffset = 10f // Extra spacing for labels
 
-        // ***** KORREKTUREN FÜR DIE ACHSE *****
-        // Stellt sicher, dass die Labels zentriert unter den Balkengruppen angezeigt werden.
         xAxis.setCenterAxisLabels(true)
-        // Setzt den Startpunkt der Achse explizit auf 0.
         xAxis.axisMinimum = 0f
-        // Stellt sicher, dass genügend Platz für alle 12 Monate vorhanden ist.
         xAxis.axisMaximum = 12f
-        // Verhindert, dass die erste und letzte Beschriftung abgeschnitten werden.
         xAxis.setAvoidFirstLastClipping(true)
 
-
+        // Configure Left Axis
         val leftAxis = binding.barChart.axisLeft
         leftAxis.axisMinimum = 0f
         leftAxis.textColor = textColor
+        leftAxis.setDrawAxisLine(false) // Remove Left-axis line
+        leftAxis.gridColor = Color.parseColor("#E0E0E0") // Light grey grid
+        leftAxis.enableGridDashedLine(10f, 10f, 0f) // Dashed grid lines
 
         binding.barChart.axisRight.isEnabled = false
         binding.barChart.legend.textColor = textColor
+        binding.barChart.extraBottomOffset = 10f
     }
 
     private fun updatePersonChartData(year: Int) {
@@ -126,7 +128,16 @@ class StatisticsFragment : Fragment() {
 
         val dataSets = arrayOfNulls<IBarDataSet>(chartPersons.size)
         var dataLoadedCounter = 0
-        val colors = listOf(Color.BLUE, Color.GREEN, Color.RED, Color.CYAN)
+        
+        // Modern colors palette (One UI inspired)
+        val colors = listOf(
+            Color.parseColor("#007AFF"), // Blue
+            Color.parseColor("#34C759"), // Green
+            Color.parseColor("#FF9500"), // Orange
+            Color.parseColor("#AF52DE"), // Purple
+            Color.parseColor("#FF2D55"), // Red/Pink
+            Color.parseColor("#5AC8FA")  // Light Blue
+        )
 
         chartPersons.forEachIndexed { index, person ->
             val liveData = personViewModel.getAbrechnungenFuerPerson(person.id)
@@ -142,10 +153,18 @@ class StatisticsFragment : Fragment() {
                     dataSets[index] = BarDataSet(entries, person.name).apply {
                         color = colors[index % colors.size]
                         setValueTextColor(textColor)
+                        valueTextSize = 10f
                     }
                     dataLoadedCounter++
                     if (dataLoadedCounter == chartPersons.size) {
-                        displayChartData(dataSets.filterNotNull().toMutableList(), 0.15f, 0.3f, 0.05f)
+                        // Calculate dynamic spacing
+                        val count = chartPersons.size
+                        val groupSpace = 0.25f
+                        val barSpace = 0.05f
+                        // Ensure group fits in 1 unit: (barWidth + barSpace) * count + groupSpace = 1.00
+                        val barWidth = (1f - groupSpace) / count - barSpace
+                        
+                        displayChartData(dataSets.filterNotNull().toMutableList(), barWidth, groupSpace, barSpace)
                     }
                 }
             })
@@ -166,9 +185,10 @@ class StatisticsFragment : Fragment() {
             }
 
             val dataSet = BarDataSet(entries, "").apply {
-                colors = listOf(Color.rgb(76, 175, 80), Color.rgb(244, 67, 54))
+                colors = listOf(Color.parseColor("#34C759"), Color.parseColor("#FF3B30")) // Modern Green/Red
                 stackLabels = arrayOf("Bezahlt", "Offen")
                 setValueTextColor(textColor)
+                valueTextSize = 10f
             }
 
             val barData = BarData(dataSet)
@@ -187,7 +207,7 @@ class StatisticsFragment : Fragment() {
 
         val dataSets = arrayOfNulls<IBarDataSet>(solaranlagen.size)
         var dataLoadedCounter = 0
-        val colors = listOf(Color.YELLOW, Color.rgb(255, 165, 0))
+        val colors = listOf(Color.parseColor("#FFD60A"), Color.parseColor("#FF9F0A")) // Yellow/Orange
 
         solaranlagen.forEachIndexed { index, solaranlage ->
             val liveData = personViewModel.getAbrechnungenFuerPerson(solaranlage.id)
@@ -203,10 +223,16 @@ class StatisticsFragment : Fragment() {
                     dataSets[index] = BarDataSet(entries, solaranlage.name).apply {
                         color = colors[index % colors.size]
                         setValueTextColor(textColor)
+                        valueTextSize = 10f
                     }
                     dataLoadedCounter++
                     if (dataLoadedCounter >= solaranlagen.size) {
-                        displayChartData(dataSets.filterNotNull().toMutableList(), 0.4f, 0.2f, 0.05f)
+                        // Dynamic spacing for 2 items
+                        val groupSpace = 0.4f
+                        val barSpace = 0.05f
+                        val barWidth = (1f - groupSpace) / 2f - barSpace
+                        
+                        displayChartData(dataSets.filterNotNull().toMutableList(), barWidth, groupSpace, barSpace)
                     }
                 }
             })

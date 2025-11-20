@@ -73,6 +73,41 @@ class MainFragment : Fragment() {
         binding.textViewMonth.text = "Abrechnung für: ${monthFormat.format(calendar.time)}"
     }
 
+    private fun updateTotals(personen: List<Person>) {
+        val prefs = androidx.preference.PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val preisProKwh = prefs.getString("preis_kwh", "0.35")?.toDoubleOrNull() ?: 0.35
+        val grundgebuehrDefault = prefs.getString("grundgebuehr", "15.00")?.toDoubleOrNull() ?: 15.00
+
+        var totalKwh = 0.0
+        var totalCost = 0.0
+
+        for (person in personen) {
+            if (person.name.contains("Solaranlage")) continue
+
+            totalKwh += person.verbrauchteKwh
+
+            // Logic must match ViewModel to be accurate
+            val grundgebuehr = when (person.id) {
+                2 -> 0.0
+                5 -> 120.0
+                else -> grundgebuehrDefault
+            }
+            
+            val cost = if (person.id == 5) {
+                grundgebuehr
+            } else {
+                (person.verbrauchteKwh * preisProKwh) + grundgebuehr
+            }
+            totalCost += cost
+        }
+
+        val kwhFormat = java.text.DecimalFormat("#,##0.##")
+        val currencyFormat = java.text.NumberFormat.getCurrencyInstance(Locale.GERMANY)
+
+        binding.textViewTotalKwh.text = "${kwhFormat.format(totalKwh)} kWh"
+        binding.textViewTotalCost.text = currencyFormat.format(totalCost)
+    }
+
     private fun observeViewModel() {
         binding.progressBar.visibility = View.VISIBLE
         binding.recyclerView.visibility = View.GONE
@@ -88,6 +123,8 @@ class MainFragment : Fragment() {
             binding.recyclerView.visibility = View.VISIBLE
 
             if (personen != null) {
+                updateTotals(personen)
+
                 val verbraucher = personen.filter { !it.name.contains("Solaranlage") }
                 val solaranlagen = personen.filter { it.name.contains("Solaranlage") }
 
