@@ -1,5 +1,6 @@
 <!-- res/layout/list_item_abrechnung.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -9,25 +10,52 @@
         android:id="@+id/textViewAbrechnungMonatJahr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Juni 2024"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        tools:text="Juni 2024" />
 
     <TextView
         android:id="@+id/textViewAbrechnungVerbrauch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Verbrauch: 150.0 kWh (52,50 €)" />
+        tools:text="Verbrauch: 150.0 kWh (52,50 €)" />
 
     <TextView
         android:id="@+id/textViewAbrechnungGesamtkosten"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gesamtkosten: 67,50 €" />
+        android:layout_marginTop="4dp"
+        tools:text="Gesamtkosten: 67,50 €" />
 
+    <!-- Checkbox für normale Personen -->
     <CheckBox
         android:id="@+id/checkBoxBezahlt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="Bezahlt" />
+
+    <!-- Layout für Person 5 -->
+    <LinearLayout
+        android:id="@+id/layout_payment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/textViewPaymentStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            tools:text="Offen: 70,00 € / 120,00 €" />
+
+        <Button
+            android:id="@+id/buttonAddPayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zahlen" />
+    </LinearLayout>
 </LinearLayout>

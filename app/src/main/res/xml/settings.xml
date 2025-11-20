@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="Kosten">
@@ -54,6 +55,20 @@
             app:summary="Name für Person 5 (Fixkosten)"
             app:defaultValue="Person 5 (Fixkosten)"
             app:dialogTitle="Namen für Person 5 eingeben" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Datensicherung">
+
+        <Preference
+            app:key="backup_data"
+            app:title="Backup erstellen"
+            app:summary="Sichert die gesamte Datenbank in einer Datei." />
+
+        <Preference
+            app:key="restore_data"
+            app:title="Backup wiederherstellen"
+            app:summary="Stellt die Datenbank aus einer Sicherungsdatei wieder her." />
 
     </PreferenceCategory>
 

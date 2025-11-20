@@ -1,4 +1,4 @@
-<!-- res/layout/fragment_main.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,20 +14,24 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        tools:text="Abrechnung für: Juni 2024" />
+        tools:text="Abrechnung für: Juli 2025" />
 
-    <Button
-        android:id="@+id/buttonResetMonth"
+    <!-- NEU: ProgressBar für Lade-Feedback -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:text="Monat zurücksetzen" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center" />
 
+    <!-- RecyclerView ist anfangs unsichtbar -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/list_item_person" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"
+        tools:listitem="@layout/list_item_person"
+        tools:visibility="visible"/>
 
 </LinearLayout>

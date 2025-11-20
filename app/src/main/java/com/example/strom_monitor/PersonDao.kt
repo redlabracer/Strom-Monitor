@@ -28,4 +28,19 @@ interface PersonDao {
 
     @Query("UPDATE personen_tabelle SET name = :newName WHERE id = :personId")
     suspend fun updateName(personId: Int, newName: String)
+
+    @Query("SELECT * FROM personen_tabelle WHERE name NOT LIKE '%Solaranlage%' ORDER BY name ASC")
+    fun getVerbraucher(): LiveData<List<Person>>
+
+    @Query("SELECT * FROM personen_tabelle WHERE name LIKE '%Solaranlage%' ORDER BY name ASC")
+    fun getSolaranlagen(): LiveData<List<Person>>
+
+    @Query("SELECT * FROM personen_tabelle ORDER BY id ASC")
+    fun getAllPersonenUndAnlagen(): LiveData<List<Person>>
+
+    @Query("SELECT * FROM personen_tabelle ORDER BY id ASC")
+    suspend fun getAllPersonsAsList(): List<Person>
+
+    @Query("SELECT * FROM personen_tabelle WHERE id = :personId")
+    suspend fun getPersonById(personId: Int): Person?
 }

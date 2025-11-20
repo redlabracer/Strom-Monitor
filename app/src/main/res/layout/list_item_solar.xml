@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Einspeisung dieser Monat"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <!-- Solaranlage 1 -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputLayoutSolar1"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                tools:hint="Solaranlage 1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextSolar1Kwh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:selectAllOnFocus="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Solaranlage 2 -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputLayoutSolar2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                tools:hint="Solaranlage 2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextSolar2Kwh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:selectAllOnFocus="true"/>
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonSaveSolar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:text="Speichern" />
+
+        <TextView
+            android:id="@+id/textViewSolarTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="Gesamteinspeisung: 350.5 kWh" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

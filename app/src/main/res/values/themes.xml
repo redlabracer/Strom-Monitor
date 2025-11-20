@@ -1,16 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
-    <style name="Theme.StromMonitor" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <!-- ACHTEN SIE AUF ".NoActionBar" AM ENDE DER NÄCHSTEN ZEILE -->
+    <style name="Theme.StromMonitor" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+        <item name="colorPrimaryVariant">@color/md_theme_primaryContainer</item>
+
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/md_theme_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+        <item name="colorSecondaryVariant">@color/md_theme_secondaryContainer</item>
+
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimary</item>
+
+        <!-- Other colors -->
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorSurface">@color/md_theme_surface</item>
+        <item name="colorError">@color/md_theme_error</item>
+
     </style>
+
 </resources>

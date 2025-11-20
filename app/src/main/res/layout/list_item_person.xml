@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,82 +16,98 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/textViewName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            tools:text="Person Name" />
+        <!-- Obere Sektion: Name und zu zahlender Betrag -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/linearLayoutCosts"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                tools:text="Person 1" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutCosts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewZuZahlen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textStyle="bold"
+                    tools:text="41,79 €" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Noch zu zahlen"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- Mittlere Sektion: Details zum Verbrauch -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginTop="12dp"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/textViewKwh"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="?android:attr/textColorSecondary"
                 tools:text="Verbrauch: 123.45 kWh" />
 
             <ImageButton
                 android:id="@+id/buttonEditKwh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="kWh-Stand bearbeiten"
                 android:src="@android:drawable/ic_menu_edit"
                 app:tint="?attr/colorControlNormal" />
-
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/textViewKosten"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Kosten Verbrauch: 43,21 €" />
-
-        <TextView
-            android:id="@+id/textViewGesamtkosten"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="Gesamtkosten: 58,21 €" />
-
-        <TextView
-            android:id="@+id/textViewGuthaben"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#4CAF50"
-            tools:text="Guthaben: -100,00 €" />
-
-        <TextView
-            android:id="@+id/textViewZuZahlen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textStyle="bold"
-            tools:text="Noch zu zahlen: -41,79 €" />
-
+        <!-- Untere Sektion: Eingabe -->
         <LinearLayout
+            android:id="@+id/layout_eingabe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editTextAddKwh"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="kWh hinzufügen"
-                android:inputType="numberDecimal" />
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextAddKwh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="kWh hinzufügen"
+                    android:inputType="numberDecimal" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/buttonAddKwh"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:text="Add" />
         </LinearLayout>
     </LinearLayout>

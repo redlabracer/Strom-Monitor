@@ -1,6 +1,7 @@
 package com.example.strom_monitor
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,16 +13,28 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.strom_monitor.databinding.FragmentMainBinding
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import java.util.*
 
 class MainFragment : Fragment() {
 
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var personViewModel: PersonViewModel
     private lateinit var adapter: PersonListAdapter
+
+    interface OnPersonSelectedListener {
+        fun onPersonSelected(personId: Int)
+    }
+    private var listener: OnPersonSelectedListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnPersonSelectedListener) {
+            listener = context
+        } else {
+            throw RuntimeException("$context must implement OnPersonSelectedListener")
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
@@ -30,43 +43,63 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        personViewModel = ViewModelProvider(this).get(PersonViewModel::class.java)
-        personViewModel.checkForMonthlyReset()
+        personViewModel = ViewModelProvider(requireActivity()).get(PersonViewModel::class.java)
+
+        // Immer den neusten Sperrstatus vom ViewModel abfragen
+        personViewModel.checkBillingLock()
+
         setupUI()
         observeViewModel()
     }
 
     private fun setupUI() {
-        val calendar = Calendar.getInstance()
-        calendar.add(Calendar.MONTH, -1)
-        val monthFormat = SimpleDateFormat("MMMM yyyy", Locale.GERMANY)
-        binding.textViewMonth.text = "Abrechnung für: ${monthFormat.format(calendar.time)}"
-
         adapter = PersonListAdapter(
             onUpdate = { person -> personViewModel.updatePerson(person) },
             onEdit = { person -> showEditKwhDialog(person) },
-            onPersonClick = { person ->
-                val fragment = StatisticsFragment()
-                val bundle = Bundle()
-                bundle.putInt("SELECTED_PERSON_ID", person.id)
-                fragment.arguments = bundle
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
+            onPersonClick = { person -> listener?.onPersonSelected(person.id) }
         )
-
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.buttonResetMonth.setOnClickListener {
-            showResetConfirmationDialog()
+    }
+
+    private fun updateTitle() {
+        val (year, month) = personViewModel.getCurrentBillingPeriod()
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.YEAR, year)
+            set(Calendar.MONTH, month - 1)
+            add(Calendar.MONTH, -1)
         }
+        val monthFormat = SimpleDateFormat("MMMM yyyy", Locale.GERMANY)
+        binding.textViewMonth.text = "Abrechnung für: ${monthFormat.format(calendar.time)}"
     }
 
     private fun observeViewModel() {
-        personViewModel.allePersonen.observe(viewLifecycleOwner) { personen ->
-            personen?.let { adapter.setData(it) }
+        binding.progressBar.visibility = View.VISIBLE
+        binding.recyclerView.visibility = View.GONE
+
+        // Auf Änderungen des Sperr-Status reagieren
+        personViewModel.isBillingLocked.observe(viewLifecycleOwner) { isLocked ->
+            adapter.setLocked(isLocked)
+            requireActivity().invalidateOptionsMenu() // Menü neu zeichnen (Button an/aus)
+        }
+
+        personViewModel.allePersonenUndAnlagen.observe(viewLifecycleOwner) { personen ->
+            binding.progressBar.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
+
+            if (personen != null) {
+                val verbraucher = personen.filter { !it.name.contains("Solaranlage") }
+                val solaranlagen = personen.filter { it.name.contains("Solaranlage") }
+
+                val listItems = mutableListOf<ListItem>()
+                verbraucher.forEach { listItems.add(ListItem.PersonItem(it)) }
+
+                if (solaranlagen.isNotEmpty()) {
+                    listItems.add(ListItem.SolarItem(solaranlagen))
+                }
+                adapter.setData(listItems)
+                updateTitle() // Titel aktualisieren, sobald Daten da sind
+            }
         }
     }
 
@@ -77,29 +110,24 @@ class MainFragment : Fragment() {
         input.inputType = android.text.InputType.TYPE_CLASS_NUMBER or android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL
         input.setText(person.verbrauchteKwh.toString())
         builder.setView(input)
-        builder.setPositiveButton("OK") { _, _ ->
-            val newValue = input.text.toString().toDoubleOrNull()
-            if (newValue != null) {
-                val updatedPerson = person.copy(verbrauchteKwh = newValue)
+        builder.setPositiveButton("Speichern") { _, _ ->
+            val neuerWertStr = input.text.toString()
+            val neuerWert = neuerWertStr.toDoubleOrNull()
+            if (neuerWert != null) {
+                val updatedPerson = person.copy(verbrauchteKwh = neuerWert)
                 personViewModel.updatePerson(updatedPerson)
+                Toast.makeText(context, "Wert für ${person.name} aktualisiert", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(requireContext(), "Ungültige Eingabe", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Ungültige Eingabe", Toast.LENGTH_SHORT).show()
             }
         }
         builder.setNegativeButton("Abbrechen") { dialog, _ -> dialog.cancel() }
         builder.show()
     }
 
-    private fun showResetConfirmationDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Monat zurücksetzen?")
-            .setMessage("Möchtest du den Verbrauch aller Personen für diesen Monat wirklich auf 0 zurücksetzen?")
-            .setPositiveButton("Ja, zurücksetzen") { _, _ ->
-                personViewModel.resetAllPersonsKwh()
-                Toast.makeText(requireContext(), "Verbrauch zurückgesetzt", Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton("Nein", null)
-            .show()
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
     }
 
     override fun onDestroyView() {

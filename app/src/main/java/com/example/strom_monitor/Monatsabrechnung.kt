@@ -12,5 +12,6 @@ data class Monatsabrechnung(
     val jahr: Int,
     val verbrauchteKwh: Double,
     val gesamtkosten: Double,
-    var bezahlt: Boolean = false
+    var bezahlt: Boolean = false,
+    var bezahlterBetrag: Double = 0.0
 )
